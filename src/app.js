@@ -1,21 +1,20 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 require('dotenv').config();
 
 const bookRoutes = require('./routes/books');
 
 const app = express();
 
-// Middleware
+// Configuração de middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Rotas da aplicação
 app.use('/bookapi/v1/book', bookRoutes);
 
-// Root endpoint
+// Endpoint raiz
 app.get('/', (req, res) => {
   res.json({
     message: 'BookAPI V1 - API REST para Livros',
@@ -24,12 +23,12 @@ app.get('/', (req, res) => {
   });
 });
 
-// 404 handler
+// Tratativa para rotas inexistentes
 app.use('*', (req, res) => {
   res.status(404).json({ message: 'Endpoint não encontrado' });
 });
 
-// Error handler
+// Tratativa genérica de erros
 app.use((error, req, res, next) => {
   console.error(error);
   res.status(500).json({ message: 'Erro interno do servidor' });

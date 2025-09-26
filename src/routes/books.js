@@ -48,11 +48,10 @@ router.post('/', async (req, res) => {
 // PUT /bookapi/v1/book/:id - Atualizar livro
 router.put('/:id', async (req, res) => {
   try {
-    const book = await Book.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
     if (!book) {
       return res.status(404).json({ message: 'Livro não encontrado' });
     }
@@ -94,7 +93,7 @@ router.get('/search/ano', async (req, res) => {
     if (!ano) {
       return res.status(400).json({ message: 'Parâmetro ano é obrigatório' });
     }
-    const books = await Book.find({ anoPublicacao: parseInt(ano) });
+    const books = await Book.find({ anoPublicacao: parseInt(ano, 10) });
     res.json(books);
   } catch (error) {
     res.status(500).json({ message: 'Erro interno do servidor', error: error.message });
@@ -105,21 +104,21 @@ router.get('/search/ano', async (req, res) => {
 router.get('/search/titulo', async (req, res) => {
   try {
     const { titulo, autor } = req.query;
-    
-    let query = {};
-    
+
+    const query = {};
+
     if (titulo) {
       query.titulo = { $regex: titulo, $options: 'i' };
     }
-    
+
     if (autor) {
       query.autor = { $regex: autor, $options: 'i' };
     }
-    
+
     if (!titulo && !autor) {
       return res.status(400).json({ message: 'Pelo menos um parâmetro (titulo ou autor) é obrigatório' });
     }
-    
+
     const books = await Book.find(query);
     res.json(books);
   } catch (error) {

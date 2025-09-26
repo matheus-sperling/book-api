@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const PORT = process.env.PORT || 8080;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/bookdb_v1';
 
-// Connect to MongoDB
-mongoose.connect(MONGODB_URI)
+// Conectar ao MongoDB
+mongoose
+  .connect(MONGODB_URI)
   .then(() => {
     console.log('Conectado ao MongoDB');
     console.log(`Database: ${MONGODB_URI}`);
@@ -15,7 +16,7 @@ mongoose.connect(MONGODB_URI)
     process.exit(1);
   });
 
-// Start server
+// Iniciar servidor HTTP
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
   console.log(`Base URL: http://localhost:${PORT}/bookapi/v1`);
